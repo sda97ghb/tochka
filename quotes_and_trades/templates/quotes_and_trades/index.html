@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Акции</title>
+</head>
+<body>
+{% if tickers %}
+    <ul>
+        {% for ticker in tickers %}
+            <li><a href="{% url 'quotes_and_trades:quotes' ticker.id %}">{{ ticker.name }}</a></li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>Акций еще нет</p>
+{% endif %}
+</body>
+</html>
