@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Аналитика {{ ticker.name }}</title>
+    <style>
+        body {
+            background-color: #eeeeee;
+            padding: 30px;
+        }
+        table {
+            border-collapse: collapse;
+            border: 1px solid black;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 10px;
+        }
+        .page-content {
+            width: 50%;
+            margin: auto;
+            background-color: #ffffff;
+            padding: 32px;
+            overflow: auto;
+        }
+        .admin-bar {
+            position: absolute;
+            right: 25%;
+            top: 8px;
+        }
+        .admin-bar a {
+            color: #aaaaaa;
+            text-decoration: none;
+        }
+        .admin-bar a:hover {
+            color: #555555;
+        }
+        .input-form {
+            width: 200px;
+            background-color: #eeeeee;
+            border-radius: 5px;
+        }
+        .input-form form {
+            padding: 16px;
+        }
+
+        .input-form input[type=submit] {
+            width: 100%;
+        }
+
+        .input-form input[type=date] {
+            margin-bottom: 16px;
+            width: 90%;
+        }
+    </style>
+</head>
+<body>
+<div class="page-content">
+    <a class="menu-link" href="{% url 'quotes_and_trades:index' %}">Список акций</a>
+    <h1>Аналитика {{ ticker.name }}</h1>
+    <div class="input-form">
+        <form action="{% url 'quotes_and_trades:analytics' ticker.id %}" method="get">
+            <label for="date_from">Начало периода</label><br/>
+            <input id="date_from" name="date_from" type="date" value="{{ date_from_iso }}"><br/>
+            <label for="date_to">Конец периода</label><br/>
+            <input id="date_to" name="date_to" type="date" value="{{ date_to_iso }}"><br/>
+            <input type="submit" value="Обновить"><br/>
+        </form>
+    </div>
+
+    {% if no_data_flag %}
+        <p>Нет данных</p>
+    {% else %}
+        <h2>Начало периода</h2>
+        <p>Open: {{ first_quote.open }}</p>
+        <p>Close: {{ first_quote.close }}</p>
+        <p>Low: {{ first_quote.low }}</p>
+        <p>High: {{ first_quote.high }}</p>
+
+        <h2>Конец периода</h2>
+        <p>Open: {{ last_quote.open }}</p>
+        <p>Close: {{ last_quote.close }}</p>
+        <p>Low: {{ last_quote.low }}</p>
+        <p>High: {{ last_quote.high }}</p>
+
+        <h2>За весь период</h2>
+        <p>Open: {{ statistics.open }}</p>
+        <p>Close: {{ statistics.close }}</p>
+        <p>Low: {{ statistics.low }}</p>
+        <p>High: {{ statistics.high }}</p>
+        <p>Close - Open: {{ statistics.change }}</p>
+    {% endif %}
+</div>
+</body>
+</html>

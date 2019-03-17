@@ -3,16 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <title>Акции</title>
+    <style>
+        body {
+            background-color: #eeeeee;
+            padding: 30px;
+        }
+        table {
+            border-collapse: collapse;
+            border: 1px solid black;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 10px;
+        }
+        .page-content {
+            width: 50%;
+            margin: auto;
+            background-color: #ffffff;
+            padding: 32px;
+            overflow: auto;
+        }
+        .admin-bar {
+            position: absolute;
+            right: 25%;
+            top: 8px;
+        }
+        .admin-bar a {
+            color: #aaaaaa;
+            text-decoration: none;
+        }
+        .admin-bar a:hover {
+            color: #555555;
+        }
+    </style>
 </head>
 <body>
-{% if tickers %}
-    <ul>
-        {% for ticker in tickers %}
-            <li><a href="{% url 'quotes_and_trades:quotes' ticker.id %}">{{ ticker.name }}</a></li>
-        {% endfor %}
-    </ul>
-{% else %}
-    <p>Акций еще нет</p>
-{% endif %}
+<div class="page-content">
+    <div class="admin-bar">
+        <a href="admin">Admin</a>
+    </div>
+    <h1>Акции</h1>
+    {% if tickers %}
+        <ul>
+            {% for ticker in tickers %}
+                <li>
+                    <a href="{% url 'quotes_and_trades:quotes' ticker.id %}">{{ ticker.name }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Акций еще нет</p>
+    {% endif %}
+</div>
 </body>
 </html>

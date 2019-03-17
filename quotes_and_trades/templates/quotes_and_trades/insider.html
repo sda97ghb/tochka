@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ insider }}</title>
+    <style>
+        body {
+            background-color: #eeeeee;
+            padding: 30px;
+        }
+        table {
+            border-collapse: collapse;
+            border: 1px solid black;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 10px;
+        }
+        .page-content {
+            width: 50%;
+            margin: auto;
+            background-color: #ffffff;
+            padding: 32px;
+            overflow: auto;
+        }
+        .top-button {
+            background-color: #222222;
+            color: #ffffff;
+            float: right;
+            padding: 8px;
+            margin-top: 10px;
+        }
+        .top-button:hover {
+            background-color: #444444;
+        }
+        .menu-link {
+            margin-right: 24px;
+        }
+    </style>
+</head>
+<body>
+<div id="page-top"></div>
+<div class="page-content">
+    <a class="menu-link" href="{% url 'quotes_and_trades:index' %}">Список акций</a>
+    <a class="menu-link" href="{% url 'quotes_and_trades:quotes' ticker.id %}">Цены акций {{ ticker.name }}</a>
+    <a class="menu-link" href="{% url 'quotes_and_trades:insiders' ticker.id %}">Торговля совладельцев компании {{ ticker.name }}</a>
+
+    <h1>Торговля {{ insider }} компании {{ ticker.name }}</h1>
+
+    {% if trades %}
+        <table>
+            <tr>
+                <th>Insider</th>
+                <th>Relation</th>
+                <th>Last Date</th>
+                <th>Transaction Type</th>
+                <th>Owner Type</th>
+                <th>Shares Traded</th>
+                <th>Last Price</th>
+                <th>Shares Held</th>
+            </tr>
+            {% for trade in trades %}
+                <tr>
+                    <td><a href="{% url 'quotes_and_trades:insider' ticker.id trade.insider %}">{{ trade.insider }}</a></td>
+                    <td>{{ trade.relation }}</td>
+                    <td>{{ trade.last_date }}</td>
+                    <td>{{ trade.transaction_type }}</td>
+                    <td>{{ trade.owner_type }}</td>
+                    <td>{{ trade.shares_traded }}</td>
+                    <td>{{ trade.last_price }}</td>
+                    <td>{{ trade.shares_held }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+        <a href="#page-top"><div class="top-button">Наверх</div></a>
+    {% else %}
+        <p>Нет данных</p>
+    {% endif %}
+</div>
+</body>
+</html>
