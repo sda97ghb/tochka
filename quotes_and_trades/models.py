@@ -10,7 +10,7 @@ class Ticker(models.Model):
 
 class Quote(models.Model):
     ticker = models.ForeignKey(Ticker, on_delete=models.CASCADE)
-    date = models.DateField()
+    date = models.DateField(unique=True)
     open = models.FloatField()
     close = models.FloatField()
     low = models.FloatField()
