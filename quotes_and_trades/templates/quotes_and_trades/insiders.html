@@ -18,7 +18,7 @@
             padding: 10px;
         }
         .page-content {
-            width: 50%;
+            width: 800px;
             margin: auto;
             background-color: #ffffff;
             padding: 32px;
@@ -44,6 +44,8 @@
 <div class="page-content">
     <a class="menu-link" href="{% url 'quotes_and_trades:index' %}">Список акций</a>
     <a class="menu-link" href="{% url 'quotes_and_trades:quotes' ticker.id %}">Цены акций {{ ticker.name }}</a>
+    <a class="menu-link" href="{% url 'quotes_and_trades:analytics' ticker.id %}">Аналитика</a>
+    <a class="menu-link" href="{% url 'quotes_and_trades:delta' ticker.id %}">Периоды</a>
 
     <h1>Торговля совладельцев компании {{ ticker.name }}</h1>
 

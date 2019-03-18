@@ -18,7 +18,7 @@
             padding: 10px;
         }
         .page-content {
-            width: 50%;
+            width: 800px;
             margin: auto;
             background-color: #ffffff;
             padding: 32px;
@@ -53,43 +53,52 @@
             margin-bottom: 16px;
             width: 90%;
         }
+        .menu-link {
+            margin-right: 24px;
+        }
     </style>
 </head>
 <body>
 <div class="page-content">
     <a class="menu-link" href="{% url 'quotes_and_trades:index' %}">Список акций</a>
+    <a class="menu-link" href="{% url 'quotes_and_trades:quotes' ticker.id %}">Цены акций {{ ticker.name }}</a>
+    <a class="menu-link" href="{% url 'quotes_and_trades:insiders' ticker.id %}">Торговля совладельцев компании {{ ticker.name }}</a>
+    <a class="menu-link" href="{% url 'quotes_and_trades:delta' ticker.id %}">Периоды</a>
+
     <h1>Аналитика {{ ticker.name }}</h1>
+
     <div class="input-form">
         <form action="{% url 'quotes_and_trades:analytics' ticker.id %}" method="get">
             <label for="date_from">Начало периода</label><br/>
-            <input id="date_from" name="date_from" type="date" value="{{ date_from_iso }}"><br/>
+            <input id="date_from" name="date_from" type="date" value="{{ iso_date_from }}"><br/>
             <label for="date_to">Конец периода</label><br/>
-            <input id="date_to" name="date_to" type="date" value="{{ date_to_iso }}"><br/>
+            <input id="date_to" name="date_to" type="date" value="{{ iso_date_to }}"><br/>
             <input type="submit" value="Обновить"><br/>
         </form>
     </div>
 
-    {% if no_data_flag %}
-        <p>Нет данных</p>
-    {% else %}
-        <h2>Начало периода</h2>
-        <p>Open: {{ first_quote.open }}</p>
-        <p>Close: {{ first_quote.close }}</p>
-        <p>Low: {{ first_quote.low }}</p>
-        <p>High: {{ first_quote.high }}</p>
+    {% if data %}
+        <h2>Начало периода {{ data.first_quote.date }}</h2>
+        <p>Open: {{ data.first_quote.open }}</p>
+        <p>Close: {{ data.first_quote.close }}</p>
+        <p>Low: {{ data.first_quote.low }}</p>
+        <p>High: {{ data.first_quote.high }}</p>
 
-        <h2>Конец периода</h2>
-        <p>Open: {{ last_quote.open }}</p>
-        <p>Close: {{ last_quote.close }}</p>
-        <p>Low: {{ last_quote.low }}</p>
-        <p>High: {{ last_quote.high }}</p>
+        <h2>Конец периода {{ data.last_quote.date }}</h2>
+        <p>Open: {{ data.last_quote.open }}</p>
+        <p>Close: {{ data.last_quote.close }}</p>
+        <p>Low: {{ data.last_quote.low }}</p>
+        <p>High: {{ data.last_quote.high }}</p>
 
         <h2>За весь период</h2>
-        <p>Open: {{ statistics.open }}</p>
-        <p>Close: {{ statistics.close }}</p>
-        <p>Low: {{ statistics.low }}</p>
-        <p>High: {{ statistics.high }}</p>
-        <p>Close - Open: {{ statistics.change }}</p>
+        <p>Open: {{ data.statistics.open }}</p>
+        <p>Close: {{ data.statistics.close }}</p>
+        <p>Low: {{ data.statistics.low }}</p>
+        <p>High: {{ data.statistics.high }}</p>
+        <p>Close - Open: {{ data.statistics.change }}</p>
+        <p>(Close - Open) / Open: {{ data.statistics.change_percent }}</p>
+    {% else %}
+        <p>Нет данных</p>
     {% endif %}
 </div>
 </body>

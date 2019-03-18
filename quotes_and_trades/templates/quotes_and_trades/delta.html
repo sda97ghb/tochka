@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Минимальные периоды {{ ticker.name }}</title>
+    <style>
+        body {
+            background-color: #eeeeee;
+            padding: 30px;
+        }
+        table {
+            border-collapse: collapse;
+            border: 1px solid black;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 10px;
+        }
+        .page-content {
+            width: 800px;
+            margin: auto;
+            background-color: #ffffff;
+            padding: 32px;
+            overflow: auto;
+        }
+        .top-button {
+            background-color: #222222;
+            color: #ffffff;
+            float: right;
+            padding: 8px;
+            margin-top: 10px;
+        }
+        .top-button:hover {
+            background-color: #444444;
+        }
+        .input-form {
+            width: 200px;
+            background-color: #eeeeee;
+            border-radius: 5px;
+        }
+        .input-form form {
+            padding: 16px;
+        }
+
+        .input-form input[type=submit] {
+            width: 100%;
+        }
+
+        .input-form input[type=date] {
+            margin-bottom: 16px;
+            width: 90%;
+        }
+        .menu-link {
+            margin-right: 24px;
+        }
+    </style>
+</head>
+<body>
+<div id="page-top"></div>
+<div class="page-content">
+    <a class="menu-link" href="{% url 'quotes_and_trades:index' %}">Список акций</a>
+    <a class="menu-link" href="{% url 'quotes_and_trades:quotes' ticker.id %}">Цены акций {{ ticker.name }}</a>
+    <a class="menu-link" href="{% url 'quotes_and_trades:insiders' ticker.id %}">Владельцы компании {{ ticker.name }}</a>
+    <a class="menu-link" href="{% url 'quotes_and_trades:analytics' ticker.id %}">Аналитика</a>
+
+    <h1>Минимальные периоды {{ ticker.name }}</h1>
+
+    <div class="input-form">
+        <form action="{% url 'quotes_and_trades:delta' ticker.id %}" method="get">
+            <label for="change">Изменение</label><br/>
+            <input id="change" name="value" type="number" value="{{ request.change }}" step="0.0001"><br/>
+            <label for="type_open">Тип</label><br/>
+            <input type="radio" name="type" value="open" id="type_open"> Open<br>
+            <input type="radio" name="type" value="close" id="type_close"> Close<br>
+            <input type="radio" name="type" value="low" id="type_low"> Low<br>
+            <input type="radio" name="type" value="high" id="type_high"> High<br>
+            <input type="submit" value="Обновить"><br/>
+        </form>
+    </div>
+
+    <h2>Периоды</h2>
+    {% if periods %}
+        <table>
+            <tr>
+                <th>Начало периода</th>
+                <th>Цена начала</th>
+                <th>Цена конца</th>
+                <th>Конец периода</th>
+            </tr>
+            {% for period in periods %}
+                <tr>
+                    <td>{{ period.start_date }}</td>
+                    <td>{{ period.start_price }}</td>
+                    <td>{{ period.finish_price }}</td>
+                    <td>{{ period.finish_date }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+        <a href="#page-top"><div class="top-button">Наверх</div></a>
+    {% else %}
+        <p>Нет данных</p>
+    {% endif %}
+</div>
+<script>
+    var selected_type = "{{ request.type }}";
+
+    if (selected_type === "open")
+        document.getElementById("type_open").checked = true;
+    else if (selected_type === "close")
+        document.getElementById("type_close").checked = true;
+    else if (selected_type === "low")
+        document.getElementById("type_low").checked = true;
+    else if (selected_type === "high")
+        document.getElementById("type_high").checked = true;
+    else
+        document.getElementById("type_open").checked = true;
+</script>
+</body>
+</html>

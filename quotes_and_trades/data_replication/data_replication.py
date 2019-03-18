@@ -48,6 +48,9 @@ def save_quotes_in_database(ticker, quotes):
         try:
             db_quote = make_db_quote(quote, db_ticker)
             db_quote.save()
+        except ValueError:
+            # Incorrect data format, for example time in the data field
+            pass
         except IntegrityError:
             # Quote already exists
             pass
@@ -96,8 +99,12 @@ def save_trades_in_database(ticker, trades):
     db_ticker = get_db_ticker(ticker)
     for trade in trades:
         print(trade)
-        db_trade = make_db_trade(trade, db_ticker)
-        db_trade.save()
+        try:
+            db_trade = make_db_trade(trade, db_ticker)
+            db_trade.save()
+        except ValueError:
+            # Incorrect data format, for example time in the data field
+            pass
 
 
 def make_db_trade(trade, db_ticker):
